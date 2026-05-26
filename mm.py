@@ -133,7 +133,7 @@ with col3:
 
 import streamlit as st
 
- from streamlit_gsheets import GSheetsConnection
+from streamlit_gsheets import GSheetsConnection
 
 st.set_page_config(layout="wide")
 
