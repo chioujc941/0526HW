@@ -29,6 +29,8 @@ with col4:
     st.markdown("### Backlog (後備任務)")
     st.write("這裡未來要放『後備任務』的卡片")
 
+
+
 import streamlit as st
 # 導入服務帳戶連接核心套件
 from streamlit_gsheets import GSheetsConnection
@@ -53,6 +55,8 @@ st.dataframe(df)
 # 4. 拆解底層資訊給學生看
 st.write("經過 Python 分析，這張表格擁有的『直欄欄位名稱（Columns）』有：", list(df.columns))
 
+
+
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 
@@ -75,6 +79,8 @@ first_owner = df.loc[2, "owner"]
 
 st.write(f"機器人回報：我們發現第 2 列（第三行任務）的名稱是：**{first_title}**")
 st.write(f"機器人回報：這一行的負責人是：**{first_owner}**")
+
+
 
 import streamlit as st 
 
