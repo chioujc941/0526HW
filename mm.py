@@ -312,3 +312,78 @@ with trello_col3:
     else:
 
         st.info("暫無已完成任務")
+
+
+
+
+# ==========================================
+# 區塊二：下方 Trello 三縱欄畫布與卡片渲染
+# ==========================================
+
+st.write("### 📊 看板動態狀態監控")
+
+trello_col1, trello_col2, trello_col3 = st.columns(3)
+
+status_list = ["To Do", "In Progress", "Done"]
+
+# ==========================================
+# 共用卡片函式
+# ==========================================
+
+def render_cards(dataframe, column_obj, status_name, color):
+
+    with column_obj:
+
+        st.markdown(
+            f"### <span style='color:{color}'>{status_name}</span>",
+            unsafe_allow_html=True
+        )
+
+        task_list = dataframe[dataframe["status"] == status_name]
+
+        if not task_list.empty:
+
+            for idx, row in task_list.iterrows():
+
+                with st.container(border=True):
+
+                    st.write(f"### 📌 {row['title']}")
+                    st.caption(f"👤 負責人：{row['owner']}")
+
+                    # 狀態轉換下拉選單
+                    new_status = st.selectbox(
+                        "變更狀態",
+                        status_list,
+                        index=status_list.index(row["status"]),
+                        key=f"status_{idx}"
+                    )
+
+                    # 更新按鈕
+                    if st.button("更新狀態", key=f"btn_{idx}"):
+
+                        # 修改 dataframe
+                        df.loc[idx, "status"] = new_status
+
+                        # 同步回 Google Sheets
+                        conn.update(
+                            worksheet="Tasks",
+                            data=df
+                        )
+
+                        st.success(f"✅ 任務已更新為 {new_status}")
+
+                        st.rerun()
+
+        else:
+            st.info("目前沒有任務")
+
+
+# ==========================================
+# 三大欄位
+# ==========================================
+
+render_cards(df, trello_col1, "To Do", "red")
+
+render_cards(df, trello_col2, "In Progress", "orange")
+
+render_cards(df, trello_col3, "Done", "green")
